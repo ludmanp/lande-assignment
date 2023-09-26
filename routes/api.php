@@ -18,9 +18,6 @@ use Illuminate\Routing\Router;
 
 Route::prefix('loan')->group(function (Router $router) {
     $router->post('', \App\Http\Controllers\Loans\CreateController::class)->name('loans.create');
-    $router->post('euribor/adjust', \App\Http\Controllers\Loans\EuriborAdjustController::class)->name('loans.euribor.adjust');
+    $router->post('euribor/adjust', \App\Http\Controllers\Loans\EuriborAdjustController::class)
+        ->name('loans.euribor.adjust');
 });
-
-//Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
-//    return $request->user();
-//});

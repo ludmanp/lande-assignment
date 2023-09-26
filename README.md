@@ -1,66 +1,132 @@
-<p align="center"><a href="https://laravel.com" target="_blank"><img src="https://raw.githubusercontent.com/laravel/art/master/logo-lockup/5%20SVG/2%20CMYK/1%20Full%20Color/laravel-logolockup-cmyk-red.svg" width="400" alt="Laravel Logo"></a></p>
+## Prerequisites
 
-<p align="center">
-<a href="https://github.com/laravel/framework/actions"><img src="https://github.com/laravel/framework/workflows/tests/badge.svg" alt="Build Status"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/dt/laravel/framework" alt="Total Downloads"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/v/laravel/framework" alt="Latest Stable Version"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/l/laravel/framework" alt="License"></a>
-</p>
+It is assumed that before installing this assignement on the computer already installed
+- Git
+- PHP v.8.1 or higher
+- Composer
 
-## About Laravel
+and available bash to run installation script.  
 
-Laravel is a web application framework with expressive, elegant syntax. We believe development must be an enjoyable and creative experience to be truly fulfilling. Laravel takes the pain out of development by easing common tasks used in many web projects, such as:
+For local containerization is used [Laravel Sail](https://laravel.com/docs/10.x/sail)
 
-- [Simple, fast routing engine](https://laravel.com/docs/routing).
-- [Powerful dependency injection container](https://laravel.com/docs/container).
-- Multiple back-ends for [session](https://laravel.com/docs/session) and [cache](https://laravel.com/docs/cache) storage.
-- Expressive, intuitive [database ORM](https://laravel.com/docs/eloquent).
-- Database agnostic [schema migrations](https://laravel.com/docs/migrations).
-- [Robust background job processing](https://laravel.com/docs/queues).
-- [Real-time event broadcasting](https://laravel.com/docs/broadcasting).
+## Setup
 
-Laravel is accessible, powerful, and provides tools required for large, robust applications.
+After git repository cloned, run
+```
+composer install
+```
+To prepare project for local usage use command 
+```
+bash make.sh
+```
+This scrip creates `.env` file if it does not exist, afterward starts Sail container and runs fresh migration for db. 
+No more actions required to start project.  
 
-## Learning Laravel
+Use [Laravel Sail](https://laravel.com/docs/10.x/sail) commands to stop container or other operations if required.
 
-Laravel has the most extensive and thorough [documentation](https://laravel.com/docs) and video tutorial library of all modern web application frameworks, making it a breeze to get started with the framework.
+Now you can access API at http://localhost 
 
-You may also try the [Laravel Bootcamp](https://bootcamp.laravel.com), where you will be guided through building a modern Laravel application from scratch.
+### Start container later
 
-If you don't feel like reading, [Laracasts](https://laracasts.com) can help. Laracasts contains over 2000 video tutorials on a range of topics including Laravel, modern PHP, unit testing, and JavaScript. Boost your skills by digging into our comprehensive video library.
+If project already initialized to start container you can use
 
-## Laravel Sponsors
+```
+./vendor/bin/sail up -d
+```
 
-We would like to extend our thanks to the following sponsors for funding Laravel development. If you are interested in becoming a sponsor, please visit the Laravel [Patreon page](https://patreon.com/taylorotwell).
+## API Reference
 
-### Premium Partners
+All POST requests header 
+```
+Accept: application/json
+```
 
-- **[Vehikl](https://vehikl.com/)**
-- **[Tighten Co.](https://tighten.co)**
-- **[Kirschbaum Development Group](https://kirschbaumdevelopment.com)**
-- **[64 Robots](https://64robots.com)**
-- **[Cubet Techno Labs](https://cubettech.com)**
-- **[Cyber-Duck](https://cyber-duck.co.uk)**
-- **[Many](https://www.many.co.uk)**
-- **[Webdock, Fast VPS Hosting](https://www.webdock.io/en)**
-- **[DevSquad](https://devsquad.com)**
-- **[Curotec](https://www.curotec.com/services/technologies/laravel/)**
-- **[OP.GG](https://op.gg)**
-- **[WebReinvent](https://webreinvent.com/?utm_source=laravel&utm_medium=github&utm_campaign=patreon-sponsors)**
-- **[Lendio](https://lendio.com)**
+**POST** `/api/loan/` - Create new loan
 
-## Contributing
+### Parameters
 
-Thank you for considering contributing to the Laravel framework! The contribution guide can be found in the [Laravel documentation](https://laravel.com/docs/contributions).
+- **amountInCents** *(integer)*: The principal loan amount in cents.
+- **term** *(integer)*: The loan term in months.
+- **interestRateInBasisPoints** *(integer)*: The initial interest rate in basis points (1 basis point = 0.01%).
+- **euriborRateInBasisPoints** *(integer)*: The initial Euribor rate in basis points (1 basis point = 0.01%).
 
-## Code of Conduct
+*All parameters are required 
 
-In order to ensure that the Laravel community is welcoming to all, please review and abide by the [Code of Conduct](https://laravel.com/docs/contributions#code-of-conduct).
+### Respnse
 
-## Security Vulnerabilities
+* **loanId**: Id on newly created loan
+* **repaymentPlan**: json with repayment plan details
+```json
+{
+  "1": {
+    "principalPaymentInCents": (integer),
+    "interestPaymentInCents": (integer),
+    "euriborPaymentInCents": (integer),
+    "totalPaymentInCents": (integer)
+  },
+  ...
+  "12": {
+    "principalPaymentInCents": (integer),
+    "interestPaymentInCents": (integer),
+    "euriborPaymentInCents": (integer),
+    "totalPaymentInCents": (integer)
+  }     
+}
+```
 
-If you discover a security vulnerability within Laravel, please send an e-mail to Taylor Otwell via [taylor@laravel.com](mailto:taylor@laravel.com). All security vulnerabilities will be promptly addressed.
+### Response code
+* 200 - success
+* 422 - validation error
 
-## License
+**POST** `/api/loan/euribor/adjust` - Adjust Euribor for loan
 
-The Laravel framework is open-sourced software licensed under the [MIT license](https://opensource.org/licenses/MIT).
+### Parameters
+
+- **loanId** *(integer)*: ID of loan.
+- **segmentNr** *(integer)*: Number of month when Euribor is changed. Allowed values between 1 and *term* of loan 
+- **euriborRateInBasisPoints** *(integer)*: The Euribor rate in basis points (1 basis point = 0.01%).
+
+*All parameters are required
+
+### Respnse
+
+* **loanId**: loan ID
+* **repaymentPlan**: json with recalculated repayment plan details
+```json
+{
+  "1": {
+    "principalPaymentInCents": (integer),
+    "interestPaymentInCents": (integer),
+    "euriborPaymentInCents": (integer),
+    "totalPaymentInCents": (integer)
+  },
+  ...
+  "12": {
+    "principalPaymentInCents": (integer),
+    "interestPaymentInCents": (integer),
+    "euriborPaymentInCents": (integer),
+    "totalPaymentInCents": (integer)
+  }     
+}
+```
+
+### Response code
+* 200 - success
+* 422 - validation error
+
+## Tests
+
+Tests can be executed with command
+
+```
+./vendor/bin/sail artisan test
+```
+
+## Assignment execution details 
+
+* Calculating repayment plan is used *half round up* principle after all calculations for current segment are done.
+* For last month is used *last month adjustment* in cases, when total principal differs from initial loan amount.
+* In assignment description last parameter of loan creation endpoint is described as *percentage*, I used more consequent *in basis points*
+* In current implementation calculation plan is not stored for loan. In real project would be more correct to store calculation for further reference.
+* I decided to use Laravel Sail for containerization as most convenient way, though for real life task some other solutions cold be used if needed.
+* Root url (http://localhost) displays this readme file.

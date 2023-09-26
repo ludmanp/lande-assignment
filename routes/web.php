@@ -14,5 +14,6 @@ use Illuminate\Support\Facades\Route;
 */
 
 Route::get('/', function () {
-    return view('welcome');
+    $text = file_get_contents(base_path('README.md'));
+    return \Illuminate\Mail\Markdown::parse($text);
 });

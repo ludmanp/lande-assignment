@@ -247,6 +247,138 @@ trait TestPlans
         );
     }
 
+    private function plan5()
+    {
+        return json_decode(
+            '{
+                    "1": {
+                        "principalPaymentInCents": 81817,
+                        "interestPaymentInCents": 3333,
+                        "euriborPaymentInCents": 3283,
+                        "totalPaymentInCents": 88433
+                    },
+                    "2": {
+                        "principalPaymentInCents": 82089,
+                        "interestPaymentInCents": 3061,
+                        "euriborPaymentInCents": 3015,
+                        "totalPaymentInCents": 88165
+                    },
+                    "3": {
+                        "principalPaymentInCents": 82363,
+                        "interestPaymentInCents": 2787,
+                        "euriborPaymentInCents": 2487,
+                        "totalPaymentInCents": 87637
+                    },
+                    "4": {
+                        "principalPaymentInCents": 82637,
+                        "interestPaymentInCents": 2512,
+                        "euriborPaymentInCents": 2242,
+                        "totalPaymentInCents": 87391
+                    },
+                    "5": {
+                        "principalPaymentInCents": 82913,
+                        "interestPaymentInCents": 2237,
+                        "euriborPaymentInCents": 1997,
+                        "totalPaymentInCents": 87147
+                    },
+                    "6": {
+                        "principalPaymentInCents": 83189,
+                        "interestPaymentInCents": 1961,
+                        "euriborPaymentInCents": 2010,
+                        "totalPaymentInCents": 87160
+                    },
+                    "7": {
+                        "principalPaymentInCents": 83467,
+                        "interestPaymentInCents": 1683,
+                        "euriborPaymentInCents": 1725,
+                        "totalPaymentInCents": 86875
+                    },
+                    "8": {
+                        "principalPaymentInCents": 83745,
+                        "interestPaymentInCents": 1405,
+                        "euriborPaymentInCents": 1440,
+                        "totalPaymentInCents": 86590
+                    },
+                    "9": {
+                        "principalPaymentInCents": 84024,
+                        "interestPaymentInCents": 1126,
+                        "euriborPaymentInCents": 1407,
+                        "totalPaymentInCents": 86557
+                    },
+                    "10": {
+                        "principalPaymentInCents": 84304,
+                        "interestPaymentInCents": 846,
+                        "euriborPaymentInCents": 1057,
+                        "totalPaymentInCents": 86207
+                    },
+                    "11": {
+                        "principalPaymentInCents": 84585,
+                        "interestPaymentInCents": 565,
+                        "euriborPaymentInCents": 593,
+                        "totalPaymentInCents": 85743
+                    },
+                    "12": {
+                        "principalPaymentInCents": 84867,
+                        "interestPaymentInCents": 283,
+                        "euriborPaymentInCents": 297,
+                        "totalPaymentInCents": 85447
+                    }
+                }',
+            true
+        );
+    }
+
+    private function planSixMonths()
+    {
+        return json_decode(
+            '{
+                    "1":
+                    {
+                        "principalPaymentInCents": 99584,
+                        "interestPaymentInCents": 1000,
+                        "euriborPaymentInCents": 0,
+                        "totalPaymentInCents": 100584
+                    },
+                    "2":
+                    {
+                        "principalPaymentInCents": 99750,
+                        "interestPaymentInCents": 834,
+                        "euriborPaymentInCents": 0,
+                        "totalPaymentInCents": 100584
+                    },
+                    "3":
+                    {
+                        "principalPaymentInCents": 99916,
+                        "interestPaymentInCents": 668,
+                        "euriborPaymentInCents": 0,
+                        "totalPaymentInCents": 100584
+                    },
+                    "4":
+                    {
+                        "principalPaymentInCents": 100083,
+                        "interestPaymentInCents": 501,
+                        "euriborPaymentInCents": 0,
+                        "totalPaymentInCents": 100584
+                    },
+                    "5":
+                    {
+                        "principalPaymentInCents": 100250,
+                        "interestPaymentInCents": 334,
+                        "euriborPaymentInCents": 0,
+                        "totalPaymentInCents": 100584
+                    },
+                    "6":
+                    {
+                        "principalPaymentInCents": 100417,
+                        "interestPaymentInCents": 167,
+                        "euriborPaymentInCents": 0,
+                        "totalPaymentInCents": 100584
+                    }
+                }',
+            true
+        );
+    }
+
     private function zeroInterestPlan()
     {
         return array_fill(1, 6, [
